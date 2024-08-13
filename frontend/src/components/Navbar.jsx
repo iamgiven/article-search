@@ -13,7 +13,7 @@ const Navbar = () => {
           <a href="/docs" title="Docs">
             <img className="w-[28px] xl:w-[32px] aspect-square" src="book.svg" alt="docs" />
           </a>
-          <a href="https://github.com/iamgiven/uas-temu-search" target="_blank" title="Github" rel="noreferrer">
+          <a href="https://github.com/iamgiven/article-search" target="_blank" title="Github" rel="noreferrer">
             <img className="w-[28px] xl:w-[32px] aspect-square" src="github.svg" alt="github" />
           </a>
         </div>
