@@ -7,7 +7,8 @@ const articleSchema = new mongoose.Schema({
   content: String,
   tags: [String],
   category: String,
-  image: String
+  image: String,
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
 
 articleSchema.index({

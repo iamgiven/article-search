@@ -10,11 +10,17 @@ const Navbar = () => {
         </a>
         
         <div className="h-full flex items-center gap-5">
-          <a href="/docs" title="Docs">
+          <a href="/docs" title="Articles">
             <img className="w-[28px] xl:w-[32px] aspect-square" src="book.svg" alt="docs" />
           </a>
           <a href="https://github.com/iamgiven/article-search" target="_blank" title="Github" rel="noreferrer">
             <img className="w-[28px] xl:w-[32px] aspect-square" src="github.svg" alt="github" />
+          </a>
+          <a href="/upload" title="Upload" rel="noreferrer">
+            <img className="w-[28px] xl:w-[32px] aspect-square" src="upload.svg" alt="upload" />
+          </a>
+          <a href="/user" title="Login" rel="noreferrer">
+            <img className="w-[28px] xl:w-[32px] aspect-square" src="user.svg" alt="user" />
           </a>
         </div>
       </div>

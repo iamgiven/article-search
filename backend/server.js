@@ -2,10 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const articleRoutes = require('./routes/articleRoutes');
-require('dotenv').config();  // Memuat variabel lingkungan dari file .env
+const authRoutes = require('./routes/authRoutes');
+require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;  // Mendapatkan PORT dari variabel lingkungan atau menggunakan nilai default 5000
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -24,7 +25,9 @@ app.get('/', (req, res) => {
   res.send('Welcome to the Document Search API');
 });
 
+// Use routes
 app.use('/', articleRoutes);
+app.use('/', authRoutes);
 
 // Start server
 app.listen(PORT, () => {

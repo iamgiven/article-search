@@ -5,6 +5,7 @@ const Home = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [recentArticles, setRecentArticles] = useState([]);
 
   const handleSearch = (searchQuery) => {
     axios.get(`http://localhost:5000/search?q=${searchQuery}`)
@@ -33,6 +34,19 @@ const Home = () => {
       handleSearch(selectedCategory);
     }
   }, [selectedCategory]);
+
+  useEffect(() => {
+    fetchRecentArticles();
+  }, []);
+
+  const fetchRecentArticles = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/recent-articles');
+      setRecentArticles(response.data);
+    } catch (error) {
+      console.error('Error fetching recent articles:', error);
+    }
+  };
 
   return (
     <main className="w-screen my-20 xl:mt-4 flex items-center flex-col">
@@ -83,6 +97,24 @@ const Home = () => {
           </div>
         ))}
       </div>
+
+      {/* Recent Articles */}
+      <div className="w-full max-w-[90%] xl:max-w-[70%] mt-10">
+        <h2 className="text-2xl font-bold mb-4">Recent Articles</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {recentArticles.map(article => (
+            <div key={article._id} className="border border-[#ddd] rounded-lg shadow overflow-hidden aspect-square">
+              <img className="w-full h-1/2 object-cover" src={article.image} alt={article.title}/>
+              <div className="w-full h-1/2 p-3 xl:px-4 xl:py-2 ">
+                <h2 className="text-lg font-semibold xl:text-lg line-clamp-2">{article.title}</h2>
+                <p className="text-sm xl:text-base text-gray-600">by {article.author}</p>
+                <p className="text-sm xl:text-sm mt-2 xl:mt-1 line-clamp-3">{article.content}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
     </main>
   );
 }
