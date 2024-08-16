@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Docs from './pages/Docs'
+import ArticleDetail from './pages/ArticleDetail';
 import User from './pages/User'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -38,6 +39,15 @@ const App = () => {
             </Helmet>
             <Navbar />
             <Docs />
+          </>
+        } />
+        <Route path="/article/:id" element={
+          <>
+            <Helmet>
+              <title>Article Detail</title>
+            </Helmet>
+            <Navbar />
+            <ArticleDetail />
           </>
         } />
         <Route path="/user" element={

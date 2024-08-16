@@ -30,10 +30,12 @@ router.get('/my-articles', auth, async (req, res) => {
   }
 });
 
-// Get 3 most recent articles
-router.get('/recent-articles', async (req, res) => {
+// Get 3 random articles
+router.get('/random-articles', async (req, res) => {
   try {
-    const articles = await Article.find().sort({ _id: -1 }).limit(3);
+    const count = await Article.countDocuments();
+    const random = Math.floor(Math.random() * (count - 3));
+    const articles = await Article.find().skip(random).limit(3);
     res.json(articles);
   } catch (error) {
     res.status(500).send(error);
@@ -78,6 +80,19 @@ router.get('/articles', async (req, res) => {
     res.json(articles);
   } catch (error) {
     console.error('Error fetching articles:', error);
+    res.status(500).send(error);
+  }
+});
+
+// Get a specific article
+router.get('/articles/:id', async (req, res) => {
+  try {
+    const article = await Article.findById(req.params.id);
+    if (!article) {
+      return res.status(404).send();
+    }
+    res.json(article);
+  } catch (error) {
     res.status(500).send(error);
   }
 });

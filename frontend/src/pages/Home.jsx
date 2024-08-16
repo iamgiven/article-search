@@ -6,27 +6,27 @@ const Home = () => {
   const [results, setResults] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [recentArticles, setRecentArticles] = useState([]);
+  const [showArticles, setShowArticles] = useState(false);
 
   const handleSearch = (searchQuery) => {
     axios.get(`http://localhost:5000/search?q=${searchQuery}`)
       .then(response => {
         setResults(response.data);
+        setShowArticles(true); // Show articles when search is performed
       })
       .catch(error => {
         console.error('There was an error searching for articles!', error);
       });
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleSearch(query);
-    }
-  };
-
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-    setQuery(category);
-    handleSearch(category);
+    if (selectedCategory === category && showArticles) {
+      setShowArticles(false); // Toggle off if the same category is clicked again
+    } else {
+      setSelectedCategory(category);
+      setQuery(category);
+      handleSearch(category);
+    }
   };
 
   useEffect(() => {
@@ -41,10 +41,10 @@ const Home = () => {
 
   const fetchRecentArticles = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/recent-articles');
+      const response = await axios.get('http://localhost:5000/random-articles');
       setRecentArticles(response.data);
     } catch (error) {
-      console.error('Error fetching recent articles:', error);
+      console.error('Error fetching random articles:', error);
     }
   };
 
@@ -58,7 +58,7 @@ const Home = () => {
           placeholder="Cari artikel..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch(query)}
         />
         <button
           className="w-[30px] h-[30px] lg:w-[40px] lg:h-[40px] absolute right-1 bg-slate-200 rounded-full grid place-items-center"
@@ -75,7 +75,7 @@ const Home = () => {
         {['Health', 'Tech', 'Science', 'Earth', 'Space'].map(category => (
           <button 
             key={category}
-            className={`w-[60px] p-2 grid place-items-center ${selectedCategory === category ? 'bg-slate-200 rounded' : ''}`}
+            className={`w-[60px] p-2 grid place-items-center ${selectedCategory === category && showArticles ? 'bg-slate-200 rounded' : ''}`}
             onClick={() => handleCategoryClick(category)}
           >
             <img src={`${category.toLowerCase()}.png`} alt={category} />
@@ -84,37 +84,46 @@ const Home = () => {
         ))}
       </div>
 
-      {/* Results */}
-      <div className="max-w-[90%] xl:max-w-[70%] mt-10 xl:mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {results.map(article => (
-          <div key={article._id} className="border border-[#ddd] rounded-lg shadow overflow-hidden aspect-square">
-            <img className="w-full h-1/2 object-cover" src={article.image} alt={article.title}/>
-            <div className="w-full h-1/2 p-3 xl:px-4 xl:py-2 ">
-                <h2 className="text-lg font-semibold xl:text-lg line-clamp-2">{article.title}</h2>
-                <p className="text-sm xl:text-base text-gray-600">by {article.author}</p>
-                <p className="text-sm xl:text-sm mt-2 xl:mt-1 line-clamp-3">{article.content}</p>
-            </div>
+      {/* Display category title and articles */}
+      {showArticles && (
+        <div className="max-w-[90%] xl:max-w-[70%] mt-10 xl:mt-20">
+          <h2 className="text-2xl font-bold mb-4">{selectedCategory} Articles</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {results.map(article => (
+              <a key={article._id} href={`/article/${article._id}`} className="border border-[#ddd] rounded-lg shadow overflow-hidden aspect-square block no-underline text-black">
+                <img className="w-full h-1/2 object-cover" src={article.image} alt={article.title}/>
+                <div className="w-full h-1/2 p-3 xl:px-4 xl:py-2 ">
+                  <h2 className="text-lg font-semibold xl:text-lg line-clamp-2">{article.title}</h2>
+                  <p className="text-sm xl:text-base text-gray-600">by {article.author}</p>
+                  <p className="text-sm xl:text-sm mt-2 xl:mt-1 line-clamp-3">{article.content}</p>
+                </div>
+              </a>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      )}
 
-      {/* Recent Articles */}
+      {/* Random Articles */}
       <div className="w-full max-w-[90%] xl:max-w-[70%] mt-10">
-        <h2 className="text-2xl font-bold mb-4">Recent Articles</h2>
+        <h2 className="text-2xl font-bold mb-4">Random Articles</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {recentArticles.map(article => (
-            <div key={article._id} className="border border-[#ddd] rounded-lg shadow overflow-hidden aspect-square">
-              <img className="w-full h-1/2 object-cover" src={article.image} alt={article.title}/>
-              <div className="w-full h-1/2 p-3 xl:px-4 xl:py-2 ">
+            <a 
+              key={article._id} 
+              href={`/article/${article._id}`} 
+              className="border border-[#ddd] rounded-lg shadow overflow-hidden aspect-square block no-underline text-black"
+            >
+              <img className="w-full h-1/2 object-cover" src={article.image} alt={article.title} />
+              <div className="w-full h-1/2 p-3 xl:px-4 xl:py-2">
                 <h2 className="text-lg font-semibold xl:text-lg line-clamp-2">{article.title}</h2>
                 <p className="text-sm xl:text-base text-gray-600">by {article.author}</p>
                 <p className="text-sm xl:text-sm mt-2 xl:mt-1 line-clamp-3">{article.content}</p>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
-      
+
     </main>
   );
 }

@@ -30,7 +30,7 @@ const User = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
-        navigate('/');
+        navigate('/login');
     };
 
     const handleEdit = (article) => {
@@ -70,7 +70,7 @@ const User = () => {
     };
 
     if (!user) {
-        return <div>Loading...</div>;
+        return <div></div>;
     }
 
     return (
@@ -88,7 +88,7 @@ const User = () => {
             </div>
 
             <div className="w-full max-w-[90%] xl:max-w-[70%]">
-                <h2 className="text-2xl font-bold mb-4">My Articles</h2>
+                <h2 className="text-2xl font-bold mb-4">Artikel Saya</h2>
                 {articles.length === 0 ? (
                     <p>You haven't uploaded any articles yet.</p>
                 ) : (
@@ -97,12 +97,14 @@ const User = () => {
                             <div key={article._id} className="bg-white shadow-lg rounded-lg overflow-hidden">
                                 {article.image && <img src={article.image} alt={article.title} className="w-full h-48 object-cover"/>}
                                 <div className="p-4">
-                                    <h3 className="font-bold text-xl mb-2">{article.title}</h3>
-                                    <p className="text-gray-700 text-base mb-2">{article.content.substring(0, 100)}...</p>
-                                    <div className="mt-4 flex justify-between">
-                                        <button onClick={() => handleEdit(article)} className="bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
-                                        <button onClick={() => handleDelete(article._id)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
-                                    </div>
+                                <h3 className="font-bold text-xl mb-2">
+                                    <a href={`/article/${article._id}`} className="hover:underline">{article.title}</a>
+                                </h3>
+                                <p className="text-gray-700 text-base mb-2">{article.content.substring(0, 100)}...</p>
+                                <div className="mt-4 flex justify-end gap-3">
+                                    <button onClick={() => handleEdit(article)} className="bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
+                                    <button onClick={() => handleDelete(article._id)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                                </div>
                                 </div>
                             </div>
                         ))}
@@ -141,6 +143,13 @@ const User = () => {
                                 onChange={e => setEditingArticle({...editingArticle, tags: e.target.value.split(', ')})}
                                 className="w-full p-2 mb-4 border rounded"
                                 placeholder="Tags (comma-separated)"
+                            />
+                            <input
+                                type="text"
+                                value={editingArticle.image}
+                                onChange={e => setEditingArticle({...editingArticle, image: e.target.value})}
+                                className="w-full p-2 mb-4 border rounded"
+                                placeholder="Category"
                             />
                             <div className="flex justify-between">
                                 <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">Update</button>

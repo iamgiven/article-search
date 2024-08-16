@@ -35,7 +35,7 @@ const Upload = () => {
 
     return (
         <main className="w-full my-20 xl:my-40 grid place-items-center">
-            <form onSubmit={handleSubmit} className="w-full max-w-[90%] xl:max-w-[70%]">
+            <form onSubmit={handleSubmit} className="w-full max-w-[90%] xl:max-w-[60%]">
                 <h2 className="text-2xl font-semibold mb-4">Upload Article</h2>
                 <input
                     className="w-full p-2 mb-4 border rounded"
