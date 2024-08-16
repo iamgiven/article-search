@@ -152,8 +152,8 @@ const User = () => {
                                 placeholder="Category"
                             />
                             <div className="flex justify-between">
-                                <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">Update</button>
                                 <button onClick={() => setEditingArticle(null)} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                                <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">Update</button>
                             </div>
                         </form>
                     </div>
